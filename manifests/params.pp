@@ -75,29 +75,16 @@ class mysql::params {
         }
       }
 
-      if $provider == 'mariadb' {
-        $client_package_name     = 'mariadb'
-        $server_package_name     = 'mariadb-server'
-        $server_service_name     = 'mariadb'
-        $log_error               = '/var/log/mariadb/mariadb.log'
-        $config_file             = '/etc/my.cnf.d/server.cnf'
-        # mariadb package by default has !includedir set in my.cnf to /etc/my.cnf.d
-        $includedir              = undef
-        $pidfile                 = '/var/run/mariadb/mariadb.pid'
-        $daemon_dev_package_name = 'mariadb-devel'
-      } else {
-        $client_package_name     = 'mysql'
-        $server_package_name     = 'mysql-server'
-        $server_service_name     = 'mysqld'
-        $log_error               = '/var/log/mysqld.log'
-        $config_file             = '/etc/my.cnf'
-        $includedir              = '/etc/my.cnf.d'
-        $pidfile                 = '/var/run/mysqld/mysqld.pid'
-        $daemon_dev_package_name = 'mysql-devel'
-      }
-
+      $client_package_name     = 'mysql'
+      $server_package_name     = 'mysql-server'
+      $server_service_name     = 'mysqld'
+      $log_error               = '/var/log/mysqld.log'
+      $config_file             = '/etc/my.cnf'
+      $includedir              = '/etc/my.cnf.d'
+      $pidfile                 = '/var/run/mysqld/mysqld.pid'
+      $daemon_dev_package_name = 'mysql-devel'
       $basedir                 = '/usr'
-      $datadir                 = '/var/lib/mysql'
+      $datadir                 = '/export/mysql/data'
       $root_group              = 'root'
       $mysql_group             = 'mysql'
       $mycnf_owner             = undef
@@ -503,22 +490,6 @@ class mysql::params {
       'log-error'        => $mysql::params::log_error,
       'socket'           => $mysql::params::socket,
     },
-    'mysqld-5.0'       => {
-      'myisam-recover' => 'BACKUP',
-    },
-    'mysqld-5.1'       => {
-      'myisam-recover' => 'BACKUP',
-    },
-    'mysqld-5.5'       => {
-      'myisam-recover' => 'BACKUP',
-      'query_cache_limit'     => '1M',
-      'query_cache_size'      => '16M',
-    },
-    'mysqld-5.6'              => {
-      'myisam-recover-options' => 'BACKUP',
-      'query_cache_limit'     => '1M',
-      'query_cache_size'      => '16M',
-    },
     'mysqld-5.7'              => {
       'myisam-recover-options' => 'BACKUP',
       'query_cache_limit'     => '1M',
@@ -526,14 +497,14 @@ class mysql::params {
     },
     'mysqld'                  => {
       'basedir'               => $mysql::params::basedir,
-      'bind-address'          => '127.0.0.1',
+      'bind-address'          => '0.0.0.0',
       'datadir'               => $mysql::params::datadir,
-      'expire_logs_days'      => '10',
+      'expire_logs_days'      => '5',
       'key_buffer_size'       => '16M',
       'log-error'             => $mysql::params::log_error,
       'max_allowed_packet'    => '16M',
-      'max_binlog_size'       => '100M',
-      'max_connections'       => '151',
+      'max_binlog_size'       => '250M',
+      'max_connections'       => '8000',
       'pid-file'              => $mysql::params::pidfile,
       'port'                  => '3306',
       'skip-external-locking' => true,
